@@ -3,7 +3,7 @@ package 구현;
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class 연구소_14502 {
 
     static int[][] map;
     static int N;
