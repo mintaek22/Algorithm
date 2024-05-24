@@ -3,7 +3,7 @@ package 플로이드워셜;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class 가장빠른버스노선구하기_11404 {
+public class 플로이드_11404 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());

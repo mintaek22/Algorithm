@@ -138,8 +138,8 @@ public class 구슬탈출2_13460 {
 
         return -1;
     }
-}
-class Idx {
+
+    static class Idx {
         int rx;
         int ry;
         int bx;
@@ -153,4 +153,6 @@ class Idx {
             this.by = by;
             this.cnt = cnt;
         }
+    }
+
 }
