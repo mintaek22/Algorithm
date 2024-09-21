@@ -5,153 +5,117 @@ import java.util.*;
 
 public class 구슬탈출2_13460 {
 
-
-    /**
-     * 보드크기 N*M
-     * 빨간구슬 빼기
-     * 파란구슬 X
-     * 4방향 기울이기
-     * R,B 둘다 빠져도 실패
-     * 10번 이하로 빨간구슬 빼기
-     * 횟수 출력 못하면 -1
-     */
-    static int N, M;
-    static char[][] map;
-    static boolean[][][][] visited;
-    static int holeX, holeY;
-    static int blueX,blueY,redX,redY;
-
-    static int[] dx = {-1, 0, 1, 0};
-    static int[] dy = {0, 1, 0, -1};
+    static String[][] map;
+    static int N,M;
+    static int Bx,By,Rx,Ry,Gx,Gy;
+    static int[] dx = {0,0,-1,1};
+    static int[] dy = {-1,1,0,0};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        map = new char[N][M];
-        visited = new boolean[N][M][N][M];
+        map = new String[N][M];
 
-        // 구슬 map 구성
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
             for (int j = 0; j < M; j++) {
+                map[i][j] = String.valueOf(str.charAt(j));
 
-                map[i][j] = str.charAt(j);
-                if (map[i][j] == 'O') {
-                    holeX = i;
-                    holeY = j;
-                } else if (map[i][j] == 'B') {
-                    blueX = i;
-                    blueY = j;
-                } else if (map[i][j] == 'R') {
-                    redX = i;
-                    redY = j;
+                if(map[i][j].equals("R")){
+                    Rx = i;
+                    Ry = j;
+                }
+                else if(map[i][j].equals("B")){
+                    Bx = i;
+                    By = j;
+                }
+                else if(map[i][j].equals("O")){
+                    Gx = i;
+                    Gy = j;
                 }
             }
         }
-
         System.out.println(bfs());
-
-        br.close();
     }
 
-    public static int bfs() {
-        Queue<Idx> queue = new LinkedList<>();
-        queue.add(new Idx(redX, redY, blueX, blueY, 1));
-        visited[redX][redY][blueX][blueY] = true;
+    static int bfs(){
+        Queue<Position> q = new LinkedList<>();
+        q.add(new Position(Bx,By,Rx,Ry,0));
 
-        while (!queue.isEmpty()) {
-            Idx Idx = queue.poll();
-
-            int curRx = Idx.rx;
-            int curRy = Idx.ry;
-            int curBx = Idx.bx;
-            int curBy = Idx.by;
-            int curCnt = Idx.cnt;
-
-            if (curCnt > 10) { // 이동 횟수가 10 초과시 실패
-                return -1;
-            }
-
+        while (!q.isEmpty()) {
+            Position p = q.poll();
             for (int i = 0; i < 4; i++) {
-                int newRx = curRx;
-                int newRy = curRy;
-                int newBx = curBx;
-                int newBy = curBy;
 
-                boolean isRedHole = false;
-                boolean isBlueHole = false;
+                int newRx = p.rx;
+                int newRy = p.ry;
+                int newBx = p.bx;
+                int newBy = p.by;
 
-                while (map[newRx + dx[i]][newRy + dy[i]] != '#') {
+                if(p.count>=10) return -1;
+
+                boolean redGoal = false;
+                boolean blueGoal = false;
+
+                while(!map[newRx + dx[i]][newRy + dy[i]].equals("#")){
                     newRx += dx[i];
                     newRy += dy[i];
-
-                    if (newRx == holeX && newRy == holeY) {
-                        isRedHole = true;
-                        break;
-                    }
+                    if(newRx == Gx && newRy == Gy) redGoal = true;
                 }
 
-                while (map[newBx + dx[i]][newBy + dy[i]] != '#') {
+                while(!map[newBx + dx[i]][newBy + dy[i]].equals("#")){
                     newBx += dx[i];
                     newBy += dy[i];
+                    if(newBx == Gx && newBy == Gy) blueGoal = true;
+                }
 
-                    if (newBx == holeX && newBy == holeY) {
-                        isBlueHole = true;
-                        break;
+                if(blueGoal) continue;
+
+                if(redGoal) return p.count+1;
+
+                //겹치면
+                if(newRx == newBx && newRy == newBy){
+                    if(i==0){
+                        if(p.ry>p.by) newRy++;
+                        else newBy++;
+                    }
+                    else if(i==1){
+                        if(p.ry>p.by) newBy--;
+                        else newRy--;
+                    }
+                    else if(i==2){
+                        if(p.rx>p.bx) newRx++;
+                        else newBx++;
+                    }
+                    else{
+                        if(p.rx>p.bx) newBx--;
+                        else newRx--;
                     }
                 }
 
-                if (isBlueHole) {
-                    continue;
-                }
 
-                if (isRedHole) {
-                    return curCnt;
-                }
+                if(newRx == p.rx && newRy == p.ry && newBx == p.bx && newBy == p.by) continue;
 
-                if (newRx == newBx && newRy == newBy) {
-                    if (i == 0) {
-                        if (curRx > curBx) newRx -= dx[i];
-                        else newBx -= dx[i];
-                    } else if (i == 1) {
-                        if (curRy < curBy) newRy -= dy[i];
-                        else newBy -= dy[i];
-                    } else if (i == 2) {
-                        if (curRx < curBx) newRx -= dx[i];
-                        else newBx -= dx[i];
-                    } else {
-                        if (curRy > curBy) newRy -= dy[i];
-                        else newBy -= dy[i];
-                    }
-                }
-
-                if (!visited[newRx][newRy][newBx][newBy]) {
-                    visited[newRx][newRy][newBx][newBy] = true;
-                    queue.add(new Idx(newRx, newRy, newBx, newBy, curCnt + 1));
-                }
+                q.add(new Position(newBx,newBy,newRx,newRy,p.count+1));
             }
         }
-
         return -1;
     }
 
-    static class Idx {
-        int rx;
-        int ry;
+    static class Position{
         int bx;
         int by;
-        int cnt;
-
-        Idx(int rx, int ry, int bx, int by, int cnt) {
-            this.rx = rx;
-            this.ry = ry;
+        int rx;
+        int ry;
+        int count;
+        public Position(int bx, int by, int rx, int ry,int count) {
             this.bx = bx;
             this.by = by;
-            this.cnt = cnt;
+            this.rx = rx;
+            this.ry = ry;
+            this.count = count;
         }
     }
 
