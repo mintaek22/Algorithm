@@ -22,7 +22,6 @@ public class 수묶기_1744 {
         int n = Integer.parseInt(br.readLine());
         PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.reverseOrder());
         PriorityQueue<Integer> mq = new PriorityQueue<>();
-        int zero = 0;
         int one = 0;
         for (int i = 0; i < n; i++) {
             int num =Integer.parseInt(br.readLine());
@@ -31,9 +30,6 @@ public class 수묶기_1744 {
             }
             else if(num == 1){
                 one++;
-            }
-            else if(num == 0){
-                zero++;
             }
             else{
                 mq.add(num);
@@ -55,9 +51,7 @@ public class 수묶기_1744 {
         }
 
         if (!mq.isEmpty()) {
-            if(zero == 0){
-                ans += mq.poll();
-            }
+            ans += mq.poll();
         }
 
         System.out.println(ans);
