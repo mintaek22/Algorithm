@@ -16,12 +16,7 @@ public class 택배_8980 {
         int C = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(br.readLine());
 
-        PriorityQueue<Node> q = new PriorityQueue<>((o1,o2)->{
-            if(o1.end== o2.end){
-                return o1.start-o2.start;
-            }
-            return o1.end-o2.end;
-        });
+        PriorityQueue<Node> q = new PriorityQueue<>((o1,o2)->o1.end-o2.end);
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
