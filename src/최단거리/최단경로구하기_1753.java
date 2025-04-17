@@ -1,4 +1,4 @@
-package 다익스트라;
+package 최단거리;
 
 import java.io.*;
 import java.util.*;
