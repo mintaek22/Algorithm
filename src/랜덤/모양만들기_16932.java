@@ -3,9 +3,7 @@ package 랜덤;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class 모양만들기_16932 {
 
@@ -41,7 +39,7 @@ public class 모양만들기_16932 {
                 if(map[i][j] == 1 && group[i][j] == 0){
                     groupNumber++;
                     count = 0;
-                    dfs(i,j);
+                    bfs(i,j);
                     score.put(groupNumber,count);
                 }
             }
@@ -76,15 +74,19 @@ public class 모양만들기_16932 {
 
     }
 
-    static void dfs(int x,int y){
-        count++;
+    static void bfs(int x, int y){
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{x, y});
         group[x][y] = groupNumber;
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if(nx>=0 && nx<N && ny>=0 && ny<M){
-                if(map[nx][ny] == 1 && group[nx][ny] == 0){
-                    dfs(nx,ny);
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            count++;
+            for (int d = 0; d < 4; d++) {
+                int nx = cur[0] + dx[d], ny = cur[1] + dy[d];
+                if (nx >= 0 && ny >= 0 && nx < N && ny < M && map[nx][ny] == 1 && group[nx][ny] == 0) {
+                    group[nx][ny] = groupNumber;
+                    q.add(new int[]{nx, ny});
                 }
             }
         }
