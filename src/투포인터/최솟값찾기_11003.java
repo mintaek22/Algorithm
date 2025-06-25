@@ -32,13 +32,13 @@ public class 최솟값찾기_11003 {
         }
         bw.flush();
     }
-}
-
-class Node{
-    int index;
-    int num;
-    Node(int index,int num){
-        this.index = index;
-        this.num = num;
+    static class Node{
+        int index;
+        int num;
+        Node(int index,int num){
+            this.index = index;
+            this.num = num;
+        }
     }
 }
+
